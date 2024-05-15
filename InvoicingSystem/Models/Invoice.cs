@@ -1,4 +1,6 @@
-﻿namespace InvoicingSystem.Models
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+namespace InvoicingSystem.Models
 {
     public class Invoice
     {
@@ -7,11 +9,13 @@
         public string CustomerName { get; set; }
         public string CustomerEmail { get; set; }
         public string CustomerContactNumber { get; set; }
+        public string CustomerAddress { get; set; }
         public List<InvoiceItem> Items { get; set; } = new List<InvoiceItem>();
         public decimal Subtotal { get; set; }
         public decimal Discount { get; set; }
         public decimal Tax { get; set; }
         public decimal Total { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public PaymentMethod PaymentMethod { get; set; }
         public DateTime CreatedAt { get; set; }
     }
@@ -27,7 +31,7 @@
 
     public enum PaymentMethod
     {
-        Cash,
+        Cash=1,
         CreditCard,
         DebitCard,
         OnlinePayment

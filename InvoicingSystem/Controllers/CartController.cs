@@ -20,7 +20,7 @@ namespace InvoicingSystem.Controllers
             _customerService = customerService;
         }
 
-        [HttpGet("{customerId}")]
+        [HttpGet("{customerId:int}")]
         public IActionResult GetCart(int customerId)
         {
             var cart = _cartService.GetCart(customerId);
@@ -66,7 +66,7 @@ namespace InvoicingSystem.Controllers
             }
         }
 
-        [HttpPut("{customerId}/update/{productId}")]
+        [HttpPut("update/{customerId:int}/{productId:int}")]
         public IActionResult UpdateCartItemQuantity(int customerId, int productId, [FromQuery] int quantity)
         {
             try
@@ -80,14 +80,14 @@ namespace InvoicingSystem.Controllers
             }
         }
 
-        [HttpDelete("{customerId}/remove/{productId}")]
+        [HttpDelete("remove/{customerId:int}/{productId:int}")]
         public IActionResult RemoveFromCart(int customerId, int productId, [FromQuery] int quantity = 1)
         {
             _cartService.RemoveFromCart(customerId, productId, quantity);
             return Ok();
         }
 
-        [HttpDelete("{customerId}/clear")]
+        [HttpDelete("clear/{customerId:int}")]
         public IActionResult ClearCart(int customerId)
         {
             _cartService.ClearCart(customerId);

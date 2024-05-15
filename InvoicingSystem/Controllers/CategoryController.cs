@@ -22,7 +22,7 @@ namespace InvoicingSystem.Controllers
             return Ok(categories);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public IActionResult GetCategoryById(int id)
         {
             var category = _categoryService.GetCategoryById(id);
@@ -60,7 +60,7 @@ namespace InvoicingSystem.Controllers
             
         }
 
-        [HttpPut("update/{id}")]
+        [HttpPut("update/{id:int}")]
         public IActionResult UpdateCategory(int id, [FromBody] Category category)
         {
             if (category == null || id != category.Id)
@@ -78,7 +78,7 @@ namespace InvoicingSystem.Controllers
             return NoContent();
         }
 
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("delete/{id:int}")]
         public IActionResult DeleteCategory(int id)
         {
             var category = _categoryService.GetCategoryById(id);

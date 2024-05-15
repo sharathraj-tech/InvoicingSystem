@@ -33,8 +33,6 @@ namespace InvoicingSystem.Services
             {
                 throw new ArgumentNullException(nameof(category));
             }
-
-            // Assign a unique ID to the new category
             category.Id = GenerateCategoryId();
 
             _categories.Add(category);

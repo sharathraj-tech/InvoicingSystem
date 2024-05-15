@@ -17,7 +17,7 @@ namespace InvoicingSystem.Services
             _cartService = cartService;
         }
 
-        public Invoice GenerateInvoice(int customerId, PaymentMethod paymentMethod)
+        public Invoice GenerateInvoice(int customerId, PaymentMethod paymentMethod=PaymentMethod.CreditCard)
         {
             try
             {
@@ -42,24 +42,25 @@ namespace InvoicingSystem.Services
                     CustomerName = customerDetails.Name,
                     CustomerEmail = customerDetails.Email,
                     CustomerContactNumber = customerDetails.ContactNumber,
+                    CustomerAddress = customerDetails.Address,
                     PaymentMethod = paymentMethod,
                     Items = invoiceItems,
                     Subtotal = cartDetails.Subtotal,
                     Total = cartDetails.Total,
-                    Discount = cartDetails.Discount,
+                    Discount = cartDetails.Discount != 0 ? cartDetails.Discount : cartDetails.Items.Sum(item => item.Discount),
                     Tax = cartDetails.Tax,
                     CreatedAt = DateTime.UtcNow,
                     Id = Guid.NewGuid()
                 };
 
                 _invoices.Add(invoice);
-                _cartService.ClearCart(customerId);
+                //_cartService.ClearCart(customerId);
 
                 return invoice;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new ArgumentException("Something went wrong! Please try again!");
+                throw new ArgumentException(ex.Message);
             }
         }
 
@@ -76,11 +77,28 @@ namespace InvoicingSystem.Services
             }
         }
 
+        public List<Invoice> GenerateCustomerInvoiceById(Guid guid)
+        {
+            var invoiceDetails = _invoices.Where(x => x.Id == guid).ToList();
+            if (invoiceDetails.Count > 0)
+            {
+                return invoiceDetails;
+            }
+            else
+            {
+                throw new ArgumentException($"No invoice details found for the ID {guid}.");
+            }
+        }
+
 
         public void AddDiscountToProduct(int customerId, int productId, decimal discountPercentage)
         {
             try
             {
+                if (discountPercentage <=0 || discountPercentage > 100)
+                {
+                    throw new ArgumentException("Discount given cannot be less than zero and greater than 100.");
+                }
                 var cartItems = _cartService.GetCartItems(customerId);
                 var cartItem = cartItems.FirstOrDefault(p => p.ProductId == productId);
                 if (cartItem != null)
@@ -89,6 +107,14 @@ namespace InvoicingSystem.Services
                     decimal discount = discountPercentage / 100;
                     decimal discountAmount = unitPrice * discount;
                     decimal finalPrice = unitPrice - discountAmount;
+                    if (discountAmount < 0)
+                    {
+                        throw new ArgumentException("Discount amount cannot be negative.");
+                    }
+                    if (finalPrice < 0)
+                    {
+                        throw new ArgumentException("Discount given cannot be more than the actual price.");
+                    }
                     cartItem.Discount = discountAmount;
                     _cartService.UpdateCartTotal(_cartService.GetCart(customerId));
                 }
@@ -108,6 +134,10 @@ namespace InvoicingSystem.Services
         {
             try
             {
+                if (discountPercentage <=0 || discountPercentage>100)
+                {
+                    throw new ArgumentException("Discount given cannot be less than zero and greater than 100.");
+                }
                 var cartItems = _cartService.GetCart(customerId);
                 if (cartItems != null)
                 {
@@ -115,6 +145,14 @@ namespace InvoicingSystem.Services
                     decimal discount = discountPercentage / 100;
                     decimal discountAmount = totalCartValue * discount;
                     decimal finalPrice = totalCartValue - discountAmount;
+                    if (discountAmount < 0)
+                    {
+                        throw new ArgumentException("Discount amount cannot be negative.");
+                    }
+                    if (finalPrice < 0)
+                    {
+                        throw new ArgumentException("Discount given cannot be more than the actual price.");
+                    }
                     cartItems.Discount = discountAmount;
                     _cartService.UpdateCartTotal(cartItems);
                 }
@@ -134,6 +172,10 @@ namespace InvoicingSystem.Services
         {
             try
             {
+                if(taxPercentage <=0 || taxPercentage>100)
+                {
+                    throw new ArgumentException("Tax % cannot be less than zero and greater than 100.");
+                }
                 var cartItems = _cartService.GetCart(customerId);
                 if (cartItems != null)
                 {

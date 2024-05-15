@@ -10,12 +10,11 @@ namespace InvoicingSystem.Services
         {
             _products = new List<Product>()
             {
-                    new Product{ Id = 1,Name = "Organic Cotton Tote Bag",Description = "A spacious and durable tote bag made from 100% organic cotton, perfect for your everyday errands.",Price = 19.99m,Quantity = 50,CategoryId = 1},
-                    new Product{ Id = 2,Name = "Smartphone Stand with Wireless Charger",
-                    Description = "A sleek and stylish smartphone stand featuring a built-in wireless charger, perfect for keeping your device powered up while watching videos or video calling.",Price = 29.99m,Quantity = 100,CategoryId = 2 },
-                    new Product{ Id = 3,Name = "Organic Lavender Essential Oil",Description = "Pure and natural lavender essential oil, sourced from organic farms, ideal for aromatherapy and relaxation.",Price = 12.99m,Quantity = 30,CategoryId = 3 },
-                    new Product{ Id = 4,Name = "Stainless Steel Water Bottle",Description = "An eco-friendly and durable water bottle made from high-quality stainless steel, perfect for staying hydrated on the go.",Price = 24.99m,Quantity = 75,CategoryId = 4 },
-                    new Product { Id = 5, Name = "Handmade Ceramic Mug", Description = "A beautifully crafted ceramic mug, hand-painted with intricate designs, ideal for enjoying your morning coffee or tea.", Price = 15.99m, Quantity = 40, CategoryId = 5 }
+                    new Product { Id = 1, Name = "Smartphone", Description = "A high-end smartphone with advanced features.", Price = 599.99m, Quantity = 20, CategoryId = 1 },
+                    new Product { Id = 2, Name = "Blender", Description = "A powerful blender for smoothies and shakes.", Price = 49.99m, Quantity = 15, CategoryId = 2 },
+                    new Product { Id = 3, Name = "Fantasy Novel", Description = "An epic fantasy novel with captivating storytelling.", Price = 15.99m, Quantity = 30, CategoryId = 3 },
+                    new Product { Id = 4, Name = "Yoga Mat", Description = "A premium yoga mat for comfortable and stable practice.", Price = 29.99m, Quantity = 25, CategoryId = 4 },
+                    new Product { Id = 5, Name = "Football", Description = "A high-quality football for recreational play.", Price = 19.99m, Quantity = 10, CategoryId = 5 }
             };
         }
         public List<Product> GetAllProducts()

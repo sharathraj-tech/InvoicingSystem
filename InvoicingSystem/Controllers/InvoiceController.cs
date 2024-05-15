@@ -21,6 +21,10 @@ namespace InvoicingSystem.Controllers
         {
             try
             {
+                if(customerId == 0)
+                {
+                    BadRequest("Customer Id is required");
+                }
                 var invoice = _invoiceService.GenerateInvoice(customerId, paymentMethod);
                 return Ok(invoice);
             }
@@ -30,12 +34,26 @@ namespace InvoicingSystem.Controllers
             }
         }
 
-        [HttpPost("get-customer-invoice")]
+        [HttpPost("get-customer-invoices")]
         public IActionResult GenerateCustomerInvoice(int customerId)
         {
             try
             {
                 var invoice = _invoiceService.GenerateCustomerInvoice(customerId);
+                return Ok(invoice);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("get-invoice-by-id")]
+        public IActionResult GenerateCustomerInvoiceById(Guid guid)
+        {
+            try
+            {
+                var invoice = _invoiceService.GenerateCustomerInvoiceById(guid);
                 return Ok(invoice);
             }
             catch (Exception ex)

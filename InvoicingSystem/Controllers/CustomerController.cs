@@ -13,7 +13,7 @@ namespace InvoicingSystem.Controllers
 
         public CustomerController(CustomerService customerService)
         {
-            _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
+            _customerService = customerService;
         }
 
         [HttpGet]
@@ -23,7 +23,7 @@ namespace InvoicingSystem.Controllers
             return Ok(customers);
         }
 
-        [HttpGet("{id}", Name = "GetCustomerById")]
+        [HttpGet("{id:int}", Name = "GetCustomerById")]
         public IActionResult GetCustomer(int id)
         {
             try
